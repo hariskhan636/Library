@@ -1,0 +1,50 @@
+<select [(ngModel)]="status" name="Status" id="status">
+  <option value="3">Select an option</option>
+  <option value="2">All books</option>
+  <option value="1">Available books</option>
+  <option value="0">Unavailable books</option>
+</select>
+
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Category</th>
+    <th>Tags</th>
+    <th *ngIf="status == '2'">Status</th>
+    <th *ngIf="status == '1'">Issue Book</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of books">
+      <ng-container *ngIf="status == '2'">
+        <td>{{ item.Id }}</td>
+        <td>{{ item.Title }}</td>
+        <td>{{ item.Author }}</td>
+        <td>{{ item.Category }}</td>
+        <td>{{ item.Tags }}</td>
+        <td *ngIf="item.Status == 0">Unavailable</td>
+        <td *ngIf="item.Status == 1">Available</td>
+      </ng-container>
+
+      <ng-container *ngIf="status == '1' && item.Status == 1">
+        <td>{{ item.Id }}</td>
+        <td>{{ item.Title }}</td>
+        <td>{{ item.Author }}</td>
+        <td>{{ item.Category }}</td>
+        <td>{{ item.Tags }}</td>
+        <td>
+          <button>Select</button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="status == '0' && item.Status == 0">
+        <td>{{ item.Id }}</td>
+        <td>{{ item.Title }}</td>
+        <td>{{ item.Author }}</td>
+        <td>{{ item.Category }}</td>
+        <td>{{ item.Tags }}</td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>
