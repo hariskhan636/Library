@@ -11,6 +11,7 @@ export class BooksComponent implements OnInit {
   issuedForm!: FormGroup;
   issueModal = false;
   status = '2';
+  count = 0;
 
   books = [
     {
@@ -114,6 +115,7 @@ export class BooksComponent implements OnInit {
 
     this.issuedForm = new FormGroup({
       Id: new FormControl('', Validators.required),
+      Name: new FormControl(),
       UserName: new FormControl('', Validators.required),
       IssueDate: new FormControl(),
     });
@@ -122,7 +124,16 @@ export class BooksComponent implements OnInit {
   issueBook() {
     this.issuedForm.get('IssueDate')?.setValue(new Date());
     const data = this.issuedForm.getRawValue();
+
+    const matchingBook = this.books.find((book) => book.Id == data.Id);
+    const title = matchingBook?.Title;
+
+    this.issuedForm.get('Name')?.setValue(title);
+
+    console.log(title);
+
     this.issuedBooks.push(data);
+
     this.availableBooks = this.availableBooks.filter(
       (book: { Id: any }) => book.Id != data.Id
     );
@@ -131,7 +142,12 @@ export class BooksComponent implements OnInit {
         book.Status = 0;
       }
     });
+
+    this.issuedBooks[this.count].Name = title;
+    this.count++;
+    console.log(this.issuedBooks);
+
     this.issueModal = false;
-    this.issuedForm.reset();
+    this.issuedForm.reset({ Id: '', UserName: '' });
   }
 }

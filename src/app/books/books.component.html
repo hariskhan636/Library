@@ -49,12 +49,14 @@
 <table *ngIf="status == '3'">
   <thead>
     <th>ID</th>
+    <th>Title</th>
     <th>Issuer Name</th>
     <th>Issue Date</th>
   </thead>
   <tbody>
     <tr *ngFor="let book of issuedBooks">
       <td>{{ book.Id }}</td>
+      <td>{{ book.Name }}</td>
       <td>{{ book.UserName }}</td>
       <td>{{ book.IssueDate }}</td>
     </tr>
