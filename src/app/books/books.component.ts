@@ -128,10 +128,6 @@ export class BooksComponent implements OnInit {
     const matchingBook = this.books.find((book) => book.Id == data.Id);
     const title = matchingBook?.Title;
 
-    this.issuedForm.get('Name')?.setValue(title);
-
-    console.log(title);
-
     this.issuedBooks.push(data);
 
     this.availableBooks = this.availableBooks.filter(
@@ -145,7 +141,6 @@ export class BooksComponent implements OnInit {
 
     this.issuedBooks[this.count].Name = title;
     this.count++;
-    console.log(this.issuedBooks);
 
     this.issueModal = false;
     this.issuedForm.reset({ Id: '', UserName: '' });

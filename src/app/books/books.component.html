@@ -15,6 +15,13 @@
     <th>Tags</th>
     <th *ngIf="status == '2'">Status</th>
   </thead>
+  <tbody *ngIf="availableBooks.length == 0">
+    <tr>
+      <td colspan="5">
+        <h3>No books available. Check back later!</h3>
+      </td>
+    </tr>
+  </tbody>
   <tbody>
     <tr *ngFor="let item of books">
       <ng-container *ngIf="status == '2'">
@@ -53,6 +60,13 @@
     <th>Issuer Name</th>
     <th>Issue Date</th>
   </thead>
+  <tbody *ngIf="issuedBooks.length == 0">
+    <tr>
+      <td colspan="4">
+        <h3>No books issued yet..</h3>
+      </td>
+    </tr>
+  </tbody>
   <tbody>
     <tr *ngFor="let book of issuedBooks">
       <td>{{ book.Id }}</td>
