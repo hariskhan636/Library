@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-books',
@@ -9,7 +9,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class BooksComponent implements OnInit {
   bookForm!: FormGroup;
   issuedForm!: FormGroup;
-  status = '3';
+  issueModal = false;
+  status = '2';
 
   books = [
     {
@@ -94,9 +95,14 @@ export class BooksComponent implements OnInit {
     },
   ];
 
+  issuedBooks: any = [];
+  availableBooks: any = [];
+
   constructor() {}
 
   ngOnInit() {
+    this.availableBooks = this.books.filter((book) => book.Status === 1);
+
     this.bookForm = new FormGroup({
       Id: new FormControl(),
       Title: new FormControl(),
@@ -105,5 +111,27 @@ export class BooksComponent implements OnInit {
       Tags: new FormControl(),
       Status: new FormControl(),
     });
+
+    this.issuedForm = new FormGroup({
+      Id: new FormControl('', Validators.required),
+      UserName: new FormControl('', Validators.required),
+      IssueDate: new FormControl(),
+    });
+  }
+
+  issueBook() {
+    this.issuedForm.get('IssueDate')?.setValue(new Date());
+    const data = this.issuedForm.getRawValue();
+    this.issuedBooks.push(data);
+    this.availableBooks = this.availableBooks.filter(
+      (book: { Id: any }) => book.Id != data.Id
+    );
+    this.books.forEach((book) => {
+      if (book.Id == data.Id) {
+        book.Status = 0;
+      }
+    });
+    this.issueModal = false;
+    this.issuedForm.reset();
   }
 }

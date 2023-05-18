@@ -1,11 +1,12 @@
-<select [(ngModel)]="status" name="Status" id="status">
-  <option value="3">Select an option</option>
+<select [(ngModel)]="status" name="Status">
+  <option value="" disabled selected>Select an option</option>
+  <option value="3">Issued books</option>
   <option value="2">All books</option>
   <option value="1">Available books</option>
   <option value="0">Unavailable books</option>
 </select>
 
-<table>
+<table *ngIf="status != '3'">
   <thead>
     <th>ID</th>
     <th>Title</th>
@@ -13,7 +14,6 @@
     <th>Category</th>
     <th>Tags</th>
     <th *ngIf="status == '2'">Status</th>
-    <th *ngIf="status == '1'">Issue Book</th>
   </thead>
   <tbody>
     <tr *ngFor="let item of books">
@@ -33,9 +33,6 @@
         <td>{{ item.Author }}</td>
         <td>{{ item.Category }}</td>
         <td>{{ item.Tags }}</td>
-        <td>
-          <button>Select</button>
-        </td>
       </ng-container>
 
       <ng-container *ngIf="status == '0' && item.Status == 0">
@@ -48,3 +45,47 @@
     </tr>
   </tbody>
 </table>
+
+<table *ngIf="status == '3'">
+  <thead>
+    <th>ID</th>
+    <th>Issuer Name</th>
+    <th>Issue Date</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of issuedBooks">
+      <td>{{ book.Id }}</td>
+      <td>{{ book.UserName }}</td>
+      <td>{{ book.IssueDate }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button (click)="issueModal = true" class="issueBtn" *ngIf="status == '1'">
+  Issue a Book
+</button>
+
+<div class="issue" [hidden]="!issueModal">
+  <form (ngSubmit)="issueBook()" class="view" [formGroup]="issuedForm">
+    <label>Book Name</label>
+    <select class="bookSelect" formControlName="Id">
+      <option value="" disabled selected>Select a Book</option>
+      <option *ngFor="let book of availableBooks" [value]="book.Id">
+        {{ book.Title }}
+      </option>
+    </select>
+    <label>User Name</label>
+    <input type="text" placeholder="User Name" formControlName="UserName" />
+    <p
+      class="errors"
+      *ngIf="this.issuedForm.controls['Id'].errors?.['required'] || 
+      this.issuedForm.controls['UserName'].errors?.['required']"
+    >
+      *Both fields are required
+    </p>
+    <button [disabled]="issuedForm.invalid" type="submit">Confirm</button>
+    <button (click)="issueModal = false" style="margin-left: inherit">
+      Cancel
+    </button>
+  </form>
+</div>
